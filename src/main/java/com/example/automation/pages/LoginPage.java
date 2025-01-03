@@ -1,28 +1,33 @@
-import com.example.automation.pages.LoginPage;
-import org.junit.jupiter.api.Test;
+package com.example.automation.pages;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class LoginAutomationTest {
-    @Test
-    void testLogin() {
-        System.setProperty("webdriver.chrome.driver", "C:\\Users\\ASUS\\Downloads\\chromedriver-win64\\chromedriver.exe");
-        WebDriver driver = new ChromeDriver();
-        try {
-            driver.get("http://the-internet.herokuapp.com/login");
+public class LoginPage {
+    private WebDriver driver;
 
-            // Use LoginPage methods
-            LoginPage loginPage = new LoginPage(driver);
-            loginPage.setUsername("tomsmith");
-            loginPage.setPassword("SuperSecretPassword!");
-            loginPage.clickLogin();
+    private By usernameField = By.id("username");
+    private By passwordField = By.id("password");
+    private By loginButton = By.cssSelector("button[type='submit']");
+    private By successMessage = By.cssSelector("div.flash.success");
 
-            // Validate successful login
-            String successMessage = loginPage.getSuccessMessage();
-            assertTrue(successMessage.contains("You logged into a secure area!"), "Login success message not found");
-        } finally {
-            driver.quit();
-        }
+    public LoginPage(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    public void setUsername(String username) {
+        driver.findElement(usernameField).sendKeys(username);
+    }
+
+    public void setPassword(String password) {
+        driver.findElement(passwordField).sendKeys(password);
+    }
+
+    public void clickLogin() {
+        driver.findElement(loginButton).click();
+    }
+
+    public String getSuccessMessage() {
+        return driver.findElement(successMessage).getText();
     }
 }
